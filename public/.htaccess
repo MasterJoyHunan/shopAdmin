@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+  Options +FollowSymlinks -Multiviews
+  RewriteEngine On
+
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]
+  RewriteCond %{HTTP_HOST} ^masterjoy.top [NC]
+  RewriteRule ^(.*)$ http://www.masterjoy.top/$1 [L,R=301]
+</IfModule>

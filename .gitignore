@@ -1,0 +1,6 @@
+.idea
+composer.lock
+*.log
+application/admin/config.php
+application/database.php
+runtime/
