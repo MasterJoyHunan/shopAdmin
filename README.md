@@ -96,15 +96,46 @@ ___
 * 商城后台
 	* think-php 5.0
 
+# 搭建本地服务
+> 1. 克隆https://github.com/MasterJoyHunan/shopAdmin到本地,并把项目根目录的里的/data/xxx.sql的数据库文件给导入
+
+ 注意:
+* 先创建shop_template数据库 
+* 再运行进行导入
+* github上上传的时候,我忽略了database.php文件,请自己创建
+* database.php下
+ * database = '你的数据库',
+ * prefix = 'mj_' ,
+ * mysql_path' => '备份文件所在的目录'
+
+以上运行,如果没报错,可以进行下一步了
+> 2.克隆https://github.com/MasterJoyHunan/shopAdmin到本地, npm install && npm run dev
+    
+ 注意:
+    * 由于shopAdmin是单独项目, js请求会跨域, 导致请求不成功, 所幸vue-cli提供了一个代理的功能. 进入shopAdmin/config/index.js, 修改以下内容
+
+	proxyTable: {
+        "/shop": {
+            target: "http://localhost/web/public/shop",   //修改为你需要调用api入口
+            changeOrigin: true,
+            pathRewrite: {
+                "^/shop": "/"
+            }
+        }
+    },
+    // 该代码是指, 所有调用/shop的地方都换装换成http://localhost/web/public/shop
+	       
+接下来,运行下面的操作
+
 # 运行VUE项目
 ``` bash
-# install dependencies
+# 安装依赖
 npm install
 
-# serve with hot reload at localhost:8080
+# 运行项目
 npm run dev
 
-# build for production with minification
+# 打包
 npm run build
 
 # build for production and view the bundle analyzer report
@@ -112,4 +143,4 @@ npm run build --report
 ```
 
 # 协议
-> license MIT
+> license MIT 
