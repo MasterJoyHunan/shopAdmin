@@ -4,3 +4,5 @@ composer.lock
 application/admin/config.php
 application/database.php
 runtime/
+
+.DS_Store
