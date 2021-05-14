@@ -4,7 +4,17 @@ metadata:
   name: shop-ingress
 spec:
   rules:
-    - host: testtuchuang.top
+    - host: masterjoy.top
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: shop-service
+                port:
+                  number: 80
+    - host: www.masterjoy.top
       http:
         paths:
           - pathType: Prefix
@@ -36,7 +46,7 @@ data:
       listen 80 default_server;
       root /application/public;
       index index.php index.html;
-      server_name testtuchuang.top;
+      server_name masterjoy.top;
       location / {
         if (!-e $request_filename) {
           rewrite ^/index.php(.*)$ /index.php?s=$1 last;  
@@ -80,15 +90,19 @@ spec:
       labels:
         app: shop
     spec:
+      imagePullSecrets:
+        - name: private-docker
       containers:
         - name: shop
-          image: registry.cn-hangzhou.aliyuncs.com/tanwuyang/shop-api:vtest
+          image: registry.cn-hangzhou.aliyuncs.com/tanwuyang/shop-template:v2021_05_14_09_04
           ports:
             - containerPort: 80
           volumeMounts:
             - mountPath: /etc/nginx/sites-available/default
               subPath: default
               name: shop-config
+            - mountPath: /application/public/uploads/
+              name: alicloud-nas
           lifecycle:
             postStart:
               exec:
@@ -100,3 +114,11 @@ spec:
         - name: shop-config
           configMap:
             name: shop-config
+        - name: alicloud-nas
+          flexVolume:
+            driver: alicloud/nas
+            options:
+              server: id-shenzhen.nas.aliyuncs.com
+              path: /shop-template
+              vers: "3"
+              options: nolock,tcp,noresvport
